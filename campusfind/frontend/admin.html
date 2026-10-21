@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusFind | Admin Dashboard</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <h2>CampusFind Admin</h2>
+    <div>
+        <a href="index.html">Home</a>
+        <button id="logoutBtn">Logout</button>
+    </div>
+</nav>
+
+<main class="container">
+    <h1>Admin Dashboard</h1>
+    <p>Manage all reported lost and found items.</p>
+
+    <div class="stats">
+        <div class="stat-card">
+            <h3>Total Items</h3>
+            <p id="totalItems">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Lost Items</h3>
+            <p id="lostItems">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Found Items</h3>
+            <p id="foundItems">0</p>
+        </div>
+    </div>
+
+    <h2>All Reported Items</h2>
+    <p id="message">Loading items...</p>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Item Name</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="itemsTableBody"></tbody>
+        </table>
+    </div>
+</main>
+
+<script src="admin.js"></script>
+</body>
+</html>

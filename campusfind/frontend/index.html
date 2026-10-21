@@ -1,0 +1,389 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CampusFind | Lost &amp; Found</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="search.css">
+
+    <style>
+        [hidden] {
+            display: none !important;
+        }
+
+        #logout-button {
+            font-family: inherit;
+        }
+
+        .item-card {
+            cursor: pointer;
+        }
+
+        .item-card:focus-visible {
+            outline: 3px solid #4169e1;
+            outline-offset: 4px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <a href="index.html" class="logo">
+        Campus<span>Find</span>
+    </a>
+
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#items">Find Items</a>
+        <a href="report.html">Report Item</a>
+
+        <a href="my-reports.html" id="my-reports-link" hidden>
+            My Reports
+        </a>
+
+        <a href="admin.html" id="adminLink" hidden>
+            Admin Dashboard
+        </a>
+    </nav>
+
+    <div class="nav-buttons">
+
+        <a href="login.html" class="login-btn" id="login-link">
+            Login
+        </a>
+
+        <a href="register.html" class="signup-btn" id="signup-link">
+            Sign Up
+        </a>
+
+        <button
+                type="button"
+                class="signup-btn"
+                id="logout-button"
+                hidden>
+            Logout
+        </button>
+
+    </div>
+</header>
+
+<main>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+
+        <p class="tagline">YOUR CAMPUS. YOUR COMMUNITY.</p>
+
+        <h1>
+            Lost something?<br>
+            <span>Let's find it.</span>
+        </h1>
+
+        <p class="hero-description">
+            A smarter way to reconnect students with their lost belongings.
+            Search reported items or help someone find what they lost.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="#items" class="primary-btn">Find an Item</a>
+            <a href="report.html" class="secondary-btn">Report Lost Item</a>
+        </div>
+
+    </section>
+
+    <!-- Lost and Found Items -->
+    <section class="items-section" id="items">
+
+        <div class="section-heading">
+            <p class="tagline">THE LOST &amp; FOUND BOARD</p>
+            <h2>Recently Reported Items</h2>
+            <p>Find something that belongs to you.</p>
+        </div>
+
+        <!-- Search and Filter -->
+        <form id="search-form" class="search-form">
+
+            <div class="search-field">
+                <span class="search-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <path d="m16 16 4 4"></path>
+                    </svg>
+                </span>
+
+                <input
+                        type="text"
+                        id="search-input"
+                        placeholder="Search items, e.g. phone, wallet..."
+                        aria-label="Search lost and found items">
+            </div>
+
+            <select id="status-filter" aria-label="Filter items by status">
+                <option value="">All Items</option>
+                <option value="LOST">Lost Items</option>
+                <option value="FOUND">Found Items</option>
+            </select>
+
+            <button type="submit" class="primary-btn">Search</button>
+
+            <button
+                    type="button"
+                    id="clear-search"
+                    class="secondary-btn">
+                Clear
+            </button>
+
+        </form>
+
+        <div id="items-container" class="items-container" aria-live="polite">
+            <p>Loading items...</p>
+        </div>
+
+    </section>
+
+    <!-- Report Section -->
+    <section class="report-section" id="report">
+
+        <h2>Lost something on campus?</h2>
+
+        <p>
+            Sign in to report an item and help your campus community.
+        </p>
+
+        <a href="report.html" class="primary-btn">Get Started</a>
+
+    </section>
+
+</main>
+
+<!-- Footer -->
+<footer>
+    <a href="index.html" class="logo">
+        Campus<span>Find</span>
+    </a>
+
+    <p>Helping campus belongings find their way home.</p>
+</footer>
+
+<script>
+    "use strict";
+
+    const container = document.getElementById("items-container");
+    const searchForm = document.getElementById("search-form");
+    const searchInput = document.getElementById("search-input");
+    const statusFilter = document.getElementById("status-filter");
+    const clearButton = document.getElementById("clear-search");
+
+    const API_URL = "http://localhost:8080/api";
+
+    // Load, search and filter items
+    async function loadItems(keyword = "", status = "") {
+
+        container.textContent = "Loading items...";
+
+        const token = localStorage.getItem("campusfind_token");
+        const trimmedKeyword = keyword.trim();
+        const selectedStatus = status.toUpperCase();
+
+        try {
+            const headers = {};
+
+            if (token) {
+                headers["Authorization"] = "Bearer " + token;
+            }
+
+            let url;
+
+            if (trimmedKeyword) {
+                url = `${API_URL}/lost-items/search?keyword=${
+                    encodeURIComponent(trimmedKeyword)
+                }`;
+            } else if (selectedStatus) {
+                url = `${API_URL}/lost-items/filter?status=${
+                    encodeURIComponent(selectedStatus)
+                }`;
+            } else {
+                url = `${API_URL}/lost-items`;
+            }
+
+            const response = await fetch(url, {
+                method: "GET",
+                headers: headers
+            });
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    container.textContent = "Please log in to view items.";
+                    return;
+                }
+
+                throw new Error("Unable to load items. Status: " + response.status);
+            }
+
+            let items = await response.json();
+
+            if (!Array.isArray(items)) {
+                throw new Error("Unexpected response from the server.");
+            }
+
+            if (trimmedKeyword && selectedStatus) {
+                items = items.filter(item =>
+                    String(item.status || "").toUpperCase() === selectedStatus
+                );
+            }
+
+            items.sort((a, b) => (Number(b.id) || 0) - (Number(a.id) || 0));
+
+            container.replaceChildren();
+
+            if (items.length === 0) {
+                container.textContent = trimmedKeyword
+                    ? "No matching items found."
+                    : selectedStatus
+                        ? "No items found with this status."
+                        : "No items have been reported yet.";
+                return;
+            }
+
+            items.forEach(item => {
+                const card = document.createElement("article");
+                card.className = "item-card";
+                card.style.cursor = "pointer";
+                card.setAttribute("tabindex", "0");
+                card.setAttribute("role", "link");
+                card.setAttribute(
+                    "aria-label",
+                    "View details for " + (item.itemName || "this item")
+                );
+
+                function openItemDetails() {
+                    if (item.id == null) return;
+
+                    window.location.href =
+                        "item-details.html?id=" + encodeURIComponent(item.id);
+                }
+
+                card.addEventListener("click", openItemDetails);
+
+                card.addEventListener("keydown", event => {
+                    if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        openItemDetails();
+                    }
+                });
+
+                const title = document.createElement("h3");
+                title.textContent = item.itemName || "Unnamed item";
+
+                const description = document.createElement("p");
+                description.textContent =
+                    item.description || "No description available.";
+
+                const location = document.createElement("p");
+                location.textContent =
+                    "Location: " + (item.location || "Not specified");
+
+                const statusBadge = document.createElement("span");
+                statusBadge.className = "status-badge";
+                statusBadge.textContent = item.status || "Unknown";
+
+                card.append(title, description, location, statusBadge);
+                container.appendChild(card);
+            });
+
+        } catch (error) {
+            console.error("Load items error:", error);
+            container.textContent =
+                "Could not load items. Please try again later.";
+        }
+    }
+
+    // Search
+    searchForm.addEventListener("submit", event => {
+        event.preventDefault();
+        loadItems(searchInput.value, statusFilter.value);
+    });
+
+    // Filter
+    statusFilter.addEventListener("change", () => {
+        loadItems(searchInput.value, statusFilter.value);
+    });
+
+    // Clear search and filter
+    clearButton.addEventListener("click", () => {
+        searchInput.value = "";
+        statusFilter.value = "";
+        loadItems();
+    });
+
+    // Navbar elements
+    const loginLink = document.getElementById("login-link");
+    const signupLink = document.getElementById("signup-link");
+    const myReportsLink = document.getElementById("my-reports-link");
+    const logoutButton = document.getElementById("logout-button");
+    const adminLink = document.getElementById("adminLink");
+
+    // Update login/logout links
+    function updateNavbar() {
+        const hasToken = Boolean(
+            localStorage.getItem("campusfind_token")
+        );
+
+        loginLink.hidden = hasToken;
+        signupLink.hidden = hasToken;
+        myReportsLink.hidden = !hasToken;
+        logoutButton.hidden = !hasToken;
+
+        // Hide admin link until backend confirms ADMIN access
+        adminLink.hidden = true;
+    }
+
+    // Check actual admin access using secured backend endpoint
+    async function checkAdminAccess() {
+        const token = localStorage.getItem("campusfind_token");
+
+        adminLink.hidden = true;
+
+        if (!token) return;
+
+        try {
+            const response = await fetch(`${API_URL}/admin/test`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                adminLink.hidden = false;
+            }
+        } catch (error) {
+            console.error("Admin access check failed:", error);
+        }
+    }
+
+    // Logout
+    logoutButton.addEventListener("click", () => {
+        if (!confirm("Are you sure you want to log out?")) {
+            return;
+        }
+
+        localStorage.removeItem("campusfind_token");
+        window.location.href = "index.html";
+    });
+
+    // Initialize page
+    updateNavbar();
+    checkAdminAccess();
+    loadItems();
+</script>
+
+</body>
+</html>

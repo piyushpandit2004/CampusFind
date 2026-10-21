@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Lost Item | CampusFind</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="report.js" defer></script>
+</head>
+<body>
+
+<header class="navbar">
+    <a href="index.html" class="logo">Campus<span>Find</span></a>
+    <a href="index.html" class="login-btn">Back to Home</a>
+</header>
+
+<main class="auth-section">
+    <div class="auth-card">
+        <p class="tagline">LOST SOMETHING?</p>
+        <h1>Report Lost Item</h1>
+        <p class="auth-description">
+            Share the details to help reconnect your belongings.
+        </p>
+
+        <form id="report-form">
+
+            <label for="itemName">Item Name</label>
+            <input
+                    type="text"
+                    id="itemName"
+                    placeholder="e.g. Black wallet"
+                    required
+            >
+
+            <label for="description">Description</label>
+            <textarea
+                    id="description"
+                    placeholder="Describe your lost item"
+                    rows="4"
+                    required
+            ></textarea>
+
+            <label for="location">Lost Location</label>
+            <input
+                    type="text"
+                    id="location"
+                    placeholder="e.g. College library"
+                    required
+            >
+
+            <label for="lostDate">Lost Date</label>
+            <input type="date" id="lostDate">
+
+            <label for="lostTime">Lost Time</label>
+            <input type="time" id="lostTime">
+
+            <label for="status">Status</label>
+            <select id="status" required>
+                <option value="LOST">Lost</option>
+                <option value="FOUND">Found</option>
+            </select>
+
+            <button
+                    type="submit"
+                    class="primary-btn auth-submit"
+                    id="report-submit"
+            >
+                Submit Report
+            </button>
+
+            <p id="report-message" role="status"></p>
+        </form>
+    </div>
+</main>
+
+<script>
+    // Login ke bina report submit nahi kar sakte
+    const token = localStorage.getItem("campusfind_token");
+
+    if (!token) {
+        window.location.replace("login.html");
+    }
+</script>
+
+</body>
+</html>

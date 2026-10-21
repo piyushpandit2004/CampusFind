@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Signup | CampusFind</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="register.js" defer></script>
+</head>
+
+<body class="signup-page">
+
+<div class="signup-card">
+
+    <h1>Signup</h1>
+    <p class="subtitle">Create your CampusFind account</p>
+
+    <form id="register-form" novalidate>
+
+        <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Enter your name"
+                autocomplete="name"
+                required
+        >
+
+        <input
+                type="text"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                autocomplete="email"
+                inputmode="email"
+                required
+        >
+
+        <!-- Password -->
+        <div class="password-box">
+            <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Create a password"
+                    autocomplete="new-password"
+                    minlength="8"
+                    maxlength="20"
+                    aria-describedby="message"
+                    required
+            >
+
+            <button
+                    type="button"
+                    class="eye-button"
+                    data-target="password"
+                    aria-label="Show password"
+                    aria-pressed="false"
+            >
+                <svg viewBox="0 0 24 24"
+                     aria-hidden="true"
+                     focusable="false">
+                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="password-box">
+            <input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    placeholder="Confirm your password"
+                    autocomplete="new-password"
+                    aria-describedby="message"
+                    required
+            >
+
+            <button
+                    type="button"
+                    class="eye-button"
+                    data-target="confirmPassword"
+                    aria-label="Show confirm password"
+                    aria-pressed="false"
+            >
+                <svg viewBox="0 0 24 24"
+                     aria-hidden="true"
+                     focusable="false">
+                    <path d="M2 12s3.5-7 10-7 10 7 10 7S2 12 2 12Z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Validation and server messages -->
+        <p id="message" role="status" aria-live="polite"></p>
+
+        <button type="submit" class="signup-submit">
+            Signup
+        </button>
+
+    </form>
+
+    <p class="signup-footer">
+        Already have an account?
+        <a href="login.html">Login</a>
+    </p>
+
+</div>
+
+</body>
+</html>

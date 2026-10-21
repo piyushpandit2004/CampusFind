@@ -1,0 +1,343 @@
+
+/* =========================
+   GLOBAL STYLES
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6fb;
+    color: #172033;
+    line-height: 1.6;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #172554;
+    color: white;
+    padding: 18px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
+}
+
+.navbar h2 {
+    font-size: 23px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin-right: 20px;
+    transition: color 0.2s ease;
+}
+
+.navbar a:hover {
+    color: #bfdbfe;
+}
+
+.navbar button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    background: #ef4444;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.navbar button:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+}
+
+/* =========================
+   DASHBOARD CONTAINER
+========================= */
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 38px auto;
+}
+
+.container > h1 {
+    color: #172554;
+    font-size: clamp(28px, 4vw, 36px);
+    letter-spacing: -0.7px;
+}
+
+.container > p {
+    color: #64748b;
+    margin-top: 10px;
+}
+
+/* =========================
+   STATISTICS CARDS
+========================= */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+    margin: 30px 0 40px;
+}
+
+.stat-card {
+    position: relative;
+    overflow: hidden;
+    background: white;
+    padding: 26px;
+    border: 1px solid #e5eaf1;
+    border-radius: 16px;
+    box-shadow: 0 5px 18px rgba(23, 32, 51, 0.04);
+    border-left: 5px solid #2563eb;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 26px rgba(23, 32, 51, 0.08);
+}
+
+.stat-card h3 {
+    color: #64748b;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.stat-card p {
+    font-size: clamp(28px, 4vw, 36px);
+    font-weight: 800;
+    margin-top: 12px;
+    color: #172554;
+    line-height: 1.2;
+}
+
+.stat-card:nth-child(2) {
+    border-left-color: #ef4444;
+}
+
+.stat-card:nth-child(3) {
+    border-left-color: #16a34a;
+}
+
+/* =========================
+   ITEMS TABLE
+========================= */
+
+.container > h2 {
+    margin-bottom: 20px;
+    color: #172554;
+    font-size: 24px;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    background: white;
+    border: 1px solid #e5eaf1;
+    border-radius: 14px;
+    box-shadow: 0 5px 18px rgba(23, 32, 51, 0.04);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 750px;
+}
+
+th,
+td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #edf0f5;
+}
+
+th {
+    background: #e8edfa;
+    color: #172554;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+td {
+    color: #475569;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+tbody tr {
+    transition: background 0.2s ease;
+}
+
+tbody tr:hover {
+    background: #f8faff;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* =========================
+   EDIT AND DELETE BUTTONS
+   Created by admin.js
+========================= */
+
+td button {
+    padding: 8px 12px !important;
+    margin: 3px 4px 3px 0;
+    border: none;
+    border-radius: 7px;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+td button:hover {
+    filter: brightness(0.9);
+    transform: translateY(-1px);
+}
+
+td button:focus-visible,
+.navbar button:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 3px;
+}
+
+/* =========================
+   LINKS AND ACCESSIBILITY
+========================= */
+
+a:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 3px;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+
+@media (max-width: 900px) {
+    .container {
+        width: 94%;
+    }
+
+    .stats {
+        gap: 16px;
+    }
+
+    .stat-card {
+        padding: 22px;
+    }
+}
+
+@media (max-width: 700px) {
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .navbar {
+        padding: 16px 5%;
+        flex-wrap: wrap;
+    }
+
+    .navbar h2 {
+        font-size: 20px;
+    }
+
+    .navbar a {
+        margin-right: 10px;
+    }
+
+    .container {
+        width: 94%;
+        margin: 28px auto;
+    }
+
+    .container > h2 {
+        font-size: 21px;
+    }
+
+    .table-wrapper {
+        border-radius: 10px;
+    }
+}
+
+@media (max-width: 420px) {
+    .navbar {
+        gap: 12px;
+    }
+
+    .navbar h2 {
+        font-size: 18px;
+    }
+
+    .navbar a {
+        font-size: 13px;
+    }
+
+    .navbar button {
+        padding: 9px 12px;
+    }
+
+    .stat-card {
+        padding: 20px;
+    }
+
+    th,
+    td {
+        padding: 12px;
+    }
+}
+
+/* =========================
+   REDUCED MOTION
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+
+    .stat-card:hover,
+    td button:hover,
+    .navbar button:hover {
+        transform: none;
+    }
+}
